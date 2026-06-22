@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Competency Claimer — BPATC-JICA Joint Knowledge Initiative</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0f2a43;--ink-2:#163a5a;--teal:#1d6a73;--teal-d:#134a51;
+  --paper:#f6f4ee;--paper-2:#fbfaf6;--line:#d7d2c6;--line-2:#e7e3d8;--muted:#5d6b78;
+  --ksa-knowledge:#5b3a8c;--ksa-skills:#1f5fa6;--ksa-attitude:#a4286a;--ksa-plan:#2e7d32;
+  --ksa-yellow:#f4c20d;--eval-red:#c0392b;
+  --shadow:0 1px 2px rgba(15,42,67,.06),0 8px 28px rgba(15,42,67,.10);
+}
+*{box-sizing:border-box}html,body{margin:0;padding:0}
+body{font-family:"Inter","Hind Siliguri",system-ui,sans-serif;
+  background:radial-gradient(1200px 600px at 80% -10%, rgba(29,106,115,.10), transparent 60%),var(--paper);
+  color:var(--ink);-webkit-font-smoothing:antialiased;}
+.bn{font-family:"Hind Siliguri","Inter",sans-serif;}
+button{font-family:inherit;cursor:pointer}input,textarea{font-family:inherit}
+:focus-visible{outline:3px solid var(--teal);outline-offset:2px;border-radius:3px}
+
+/* top bar */
+.topbar{position:sticky;top:0;z-index:50;background:linear-gradient(180deg,var(--ink),var(--ink-2));color:#fff;border-bottom:3px solid var(--teal);}
+.topbar-inner{max-width:1180px;margin:0 auto;padding:14px 22px;display:flex;align-items:center;gap:18px;}
+.crest{width:42px;height:42px;flex:none;border-radius:8px;background:linear-gradient(135deg,var(--ksa-knowledge),var(--ksa-skills) 40%,var(--ksa-attitude) 70%,var(--ksa-plan));display:grid;place-items:center;color:#fff;font-weight:700;box-shadow:inset 0 0 0 2px rgba(255,255,255,.25);font-family:"Fraunces",serif;font-size:20px;}
+.brand h1{font-family:"Fraunces",serif;font-weight:600;font-size:19px;line-height:1.1;margin:0;letter-spacing:.2px;}
+.brand .sub{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:#9fc3c8;margin-top:3px}
+.brand .init{font-size:11px;color:#cfe0e2;margin-top:1px}
+.spacer{flex:1}
+.who{display:flex;align-items:center;gap:10px;font-size:13px}
+.who .pill{background:rgba(255,255,255,.12);padding:6px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.18)}
+.who button{background:transparent;color:#cfe0e2;border:1px solid rgba(255,255,255,.3);padding:6px 12px;border-radius:8px;font-size:12.5px}
+.who button:hover{background:rgba(255,255,255,.12)}
+.cloud-status{display:flex;align-items:center;gap:6px;font-size:12px;color:#9fc3c8}
+.dot{width:8px;height:8px;border-radius:50%;background:#7bd389}
+.dot.syncing{background:#f4c20d}.dot.err{background:#ff8a80}
+
+.wrap{max-width:1180px;margin:0 auto;padding:22px}
+.shell{display:grid;grid-template-columns:230px 1fr;gap:22px;align-items:start}
+
+.rail{position:sticky;top:84px;background:var(--paper-2);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--shadow)}
+.rail h2{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:0 0 4px}
+.progress-wrap{margin:10px 0 14px}
+.progress-bar{height:8px;border-radius:999px;background:var(--line-2);overflow:hidden}
+.progress-fill{height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--ksa-knowledge),var(--ksa-skills),var(--ksa-attitude),var(--ksa-plan));transition:width .35s ease}
+.progress-num{font-size:12px;color:var(--muted);margin-top:6px}
+.pagegrid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;max-height:330px;overflow:auto;padding-right:2px}
+.pagegrid button{aspect-ratio:1;border:1px solid var(--line);background:#fff;border-radius:8px;font-size:12.5px;font-weight:600;color:var(--ink);position:relative;padding:0;}
+.pagegrid button:hover{border-color:var(--teal)}
+.pagegrid button.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+.pagegrid button.done::after{content:"";position:absolute;top:4px;right:4px;width:7px;height:7px;border-radius:50%;background:var(--ksa-plan)}
+.pagegrid button.active.done::after{background:#9be59f}
+.rail .navbtns{display:flex;gap:8px;margin-top:14px}
+.rail .navbtns button{flex:1;border:1px solid var(--line);background:#fff;border-radius:9px;padding:9px 0;font-size:13px;font-weight:600;color:var(--ink)}
+.rail .navbtns button:hover{background:var(--paper)}
+.rail .saved-note{font-size:11px;color:var(--ksa-plan);text-align:center;margin-top:10px;min-height:14px;font-weight:600}
+
+.cardhead{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:10px;gap:14px;flex-wrap:wrap}
+.cardhead .title{font-family:"Fraunces",serif;font-size:22px;font-weight:600}
+.cardhead .pageref{font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
+
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;display:grid;grid-template-columns:1fr 290px;}
+.formhead{padding:18px 20px 14px;border-bottom:1px solid var(--line-2)}
+.fh-row{display:grid;grid-template-columns:1fr 170px;gap:14px;align-items:end}
+.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px}
+.field input{width:100%;border:none;border-bottom:1.5px solid var(--line);background:transparent;padding:5px 2px;font-size:14px;color:var(--ink)}
+.field input:focus{border-bottom-color:var(--teal)}
+.fh-stack{display:flex;flex-direction:column;gap:10px;margin-bottom:10px}
+
+.band{display:grid;grid-template-columns:46px 1fr;border-bottom:1px solid var(--line-2)}
+.spine{writing-mode:vertical-rl;transform:rotate(180deg);display:grid;place-items:center;color:#fff;font-weight:700;letter-spacing:.06em;font-size:11px;line-height:1.15;text-align:center;padding:8px 0}
+.spine small{font-weight:500;opacity:.85;font-size:9.5px;display:block}
+.band.k .spine{background:var(--ksa-knowledge)}.band.s .spine{background:var(--ksa-skills)}
+.band.a .spine{background:var(--ksa-attitude)}.band.p .spine{background:var(--ksa-plan)}
+.band-strip{display:grid;grid-template-columns:1fr auto;align-items:center;color:#fff;padding:7px 14px;gap:10px}
+.band.k .band-strip{background:var(--ksa-knowledge)}.band.s .band-strip{background:var(--ksa-skills)}
+.band.a .band-strip{background:var(--ksa-attitude)}.band.p .band-strip{background:var(--ksa-plan)}
+.band-strip .bn-title{font-weight:600;font-size:14px}
+.band-strip .learn{font-size:12.5px;font-weight:600;opacity:.95;display:flex;align-items:center;gap:6px}
+.band-strip .learn .ico{width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.25);display:grid;place-items:center;font-size:11px}
+
+.testgrid{display:grid;grid-template-columns:1fr 90px 90px 90px}
+.testgrid .th{font-size:11px;color:var(--muted);text-align:center;padding:6px 4px;border-bottom:1px solid var(--line-2);border-left:1px solid var(--line-2);background:var(--paper)}
+.testgrid .th.first{text-align:left;background:transparent}
+.testgrid .cell{border-bottom:1px solid var(--line-2);border-left:1px solid var(--line-2);padding:0}
+.testgrid .cell.first{border-left:none}
+.testgrid input.num{width:100%;border:none;background:transparent;text-align:center;padding:9px 2px;font-size:14px;color:var(--ink)}
+.testgrid input.note{width:100%;border:none;background:transparent;padding:9px 12px;font-size:13px;color:var(--ink)}
+.testgrid input:focus{background:#fff7e6}
+
+.evalrow{display:flex;align-items:center;gap:16px;padding:10px 14px;flex-wrap:wrap;border-bottom:1px solid var(--line-2);background:var(--paper-2)}
+.evalrow .lbl{font-size:12.5px;color:var(--muted);font-weight:600}
+.checks{display:flex;gap:16px;flex-wrap:wrap}
+.chk{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--ink);cursor:pointer;user-select:none}
+.chk input{accent-color:var(--teal);width:16px;height:16px}
+.total{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted)}
+.total input{width:64px;border:1px solid var(--line);border-radius:7px;padding:5px 8px;text-align:center;font-size:14px;font-weight:600;color:var(--ink)}
+
+.planbody{padding:14px 16px;display:flex;flex-direction:column;gap:12px;background:#fff}
+.planbody textarea{width:100%;min-height:70px;resize:vertical;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13.5px;color:var(--ink);background:var(--paper-2)}
+.planbody textarea:focus{background:#fff;border-color:var(--teal)}
+.plan-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+.footerblock{display:grid;grid-template-columns:200px 1fr;gap:0;border-top:1px solid var(--line-2)}
+.claimed{background:var(--ksa-yellow);padding:16px;display:flex;flex-direction:column;justify-content:center}
+.claimed .lab{font-family:"Fraunces",serif;font-weight:700;color:#5a4500;font-size:16px;line-height:1.1}
+.claimed textarea{margin-top:10px;width:100%;min-height:64px;border:1px solid rgba(0,0,0,.18);border-radius:8px;background:rgba(255,255,255,.65);padding:8px;font-size:13px;resize:vertical;color:#3a2e00}
+.sigs{padding:16px 18px;display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:end}
+.sig label{display:block;font-size:12px;color:var(--muted);margin-bottom:18px}
+.sig input{width:100%;border:none;border-bottom:1.5px dashed var(--line);padding:5px 2px;font-size:14px;text-align:center;background:transparent}
+.sig .cap{font-size:11.5px;color:var(--muted);text-align:center;margin-top:6px}
+
+.side{background:var(--paper-2);border-left:1px solid var(--line-2)}
+.side-head{background:var(--eval-red);color:#fff;padding:12px 16px;font-weight:700;font-size:15px}
+.side-inner{padding:14px 16px;display:flex;flex-direction:column;gap:16px}
+.side .field input{border-bottom-color:var(--line)}
+.q .qt{font-size:12.5px;color:var(--ink);line-height:1.4;margin-bottom:7px}
+.q .qt .en{color:var(--muted);font-size:11.5px}
+.optset{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.yn{display:flex;gap:14px}
+.score{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);margin-left:auto}
+.score input{width:54px;border:1px solid var(--line);border-radius:7px;padding:4px 6px;text-align:center;font-weight:600;color:var(--ink)}
+.side hr{border:none;border-top:1px solid var(--line-2);margin:2px 0}
+.side textarea{width:100%;min-height:64px;border:1px solid var(--line);border-radius:10px;padding:9px;font-size:13px;resize:vertical;color:var(--ink);background:#fff}
+.side .feedlab{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink);font-weight:600;margin-bottom:7px}
+
+/* gate / auth */
+.gate{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:18px;overflow:auto;
+  background:radial-gradient(900px 500px at 75% 0%, rgba(29,106,115,.18), transparent 60%),linear-gradient(180deg,var(--ink),#0b2236)}
+.gatecard{width:min(440px,94vw);background:var(--paper-2);border-radius:18px;box-shadow:0 30px 80px rgba(0,0,0,.45);overflow:hidden;margin:auto}
+.gatecard .gh{background:linear-gradient(135deg,var(--ksa-knowledge),var(--ksa-skills) 45%,var(--ksa-attitude) 75%,var(--ksa-plan));padding:26px 26px 22px;color:#fff}
+.gatecard .gh .crest{width:48px;height:48px;background:rgba(255,255,255,.16);box-shadow:inset 0 0 0 2px rgba(255,255,255,.35)}
+.gatecard .gh h1{font-family:"Fraunces",serif;font-size:23px;margin:14px 0 4px;font-weight:600;line-height:1.12}
+.gatecard .gh p{margin:0;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.85)}
+.gatecard .gb{padding:22px 26px 26px}
+.tabs{display:flex;gap:6px;background:var(--line-2);padding:4px;border-radius:11px;margin-bottom:18px}
+.tabs button{flex:1;border:none;background:transparent;padding:9px;border-radius:8px;font-size:13.5px;font-weight:600;color:var(--muted)}
+.tabs button.active{background:#fff;color:var(--ink);box-shadow:var(--shadow)}
+.gatecard .gb label{display:block;font-size:12px;color:var(--muted);margin:0 0 6px}
+.gatecard .gb input{width:100%;border:1px solid var(--line);border-radius:11px;padding:11px 13px;font-size:15px;color:var(--ink);background:#fff;margin-bottom:13px}
+.gatecard .gb input:focus{border-color:var(--teal)}
+.gatecard .gb .enter{margin-top:4px;width:100%;border:none;background:var(--ink);color:#fff;border-radius:11px;padding:13px;font-size:15px;font-weight:600}
+.gatecard .gb .enter:hover{background:var(--ink-2)}
+.gatecard .gb .enter:disabled{opacity:.6;cursor:default}
+.msg{font-size:12.5px;margin-top:12px;line-height:1.5;padding:10px 12px;border-radius:9px;display:none}
+.msg.show{display:block}
+.msg.err{background:#fdecea;color:#a4271c;border:1px solid #f5c6c0}
+.msg.ok{background:#e9f6ec;color:#1e6b2c;border:1px solid #bfe2c6}
+.msg.info{background:#eef4f7;color:#274b5a;border:1px solid #cfe0e2}
+.hint{font-size:11.5px;color:var(--muted);margin:-6px 0 10px;line-height:1.45}
+
+/* config banner */
+.config-banner{position:fixed;inset:0;z-index:120;display:grid;place-items:center;padding:18px;background:linear-gradient(180deg,var(--ink),#0b2236);overflow:auto}
+.config-card{width:min(620px,95vw);background:var(--paper-2);border-radius:18px;box-shadow:0 30px 80px rgba(0,0,0,.45);overflow:hidden;margin:auto}
+.config-card .ch{background:var(--ink);color:#fff;padding:20px 26px}
+.config-card .ch h2{margin:0;font-family:"Fraunces",serif;font-size:20px;font-weight:600}
+.config-card .ch p{margin:6px 0 0;font-size:13px;color:#cfe0e2}
+.config-card .cb{padding:22px 26px 26px}
+.config-card .cb label{display:block;font-size:12.5px;color:var(--muted);margin:12px 0 6px;font-weight:600}
+.config-card .cb input{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:14px;color:var(--ink);background:#fff}
+.config-card .cb .go{margin-top:18px;width:100%;border:none;background:var(--teal);color:#fff;border-radius:11px;padding:13px;font-size:15px;font-weight:600}
+.config-card .cb .go:hover{background:var(--teal-d)}
+.config-card .cb ol{font-size:13px;color:var(--ink);line-height:1.7;padding-left:20px;margin:6px 0 0}
+.config-card .cb code{background:#eef0ec;padding:1px 6px;border-radius:5px;font-size:12px}
+.config-card details{margin-top:16px;font-size:13px}
+.config-card summary{cursor:pointer;font-weight:600;color:var(--teal-d)}
+
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 16px}
+.tbtn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 14px;font-size:13px;font-weight:600;color:var(--ink);display:inline-flex;align-items:center;gap:7px}
+.tbtn:hover{background:var(--paper);border-color:var(--teal)}
+.tbtn.primary{background:var(--teal);color:#fff;border-color:var(--teal)}
+.tbtn.primary:hover{background:var(--teal-d)}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:11px 20px;border-radius:11px;font-size:13.5px;font-weight:600;box-shadow:0 12px 40px rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:.3s;z-index:90}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* dashboard */
+.dash-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.dash-title{font-family:"Fraunces",serif;font-size:24px;font-weight:600}
+.dash-sub{font-size:13px;color:var(--muted);margin-top:3px}
+.dash-actions{display:flex;gap:10px;flex-wrap:wrap}
+.dash-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.stat{background:var(--paper-2);border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow)}
+.stat .n{font-family:"Fraunces",serif;font-size:30px;font-weight:600;color:var(--ink);line-height:1}
+.stat .l{font-size:12px;color:var(--muted);margin-top:6px;letter-spacing:.04em}
+.stat .bar{height:6px;border-radius:999px;background:var(--line-2);margin-top:12px;overflow:hidden}
+.stat .bar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--ksa-knowledge),var(--ksa-skills),var(--ksa-attitude),var(--ksa-plan))}
+.dash-grid{display:grid;grid-template-columns:340px 1fr;gap:20px;align-items:start}
+.dash-list{background:var(--paper-2);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+.dash-list-head{display:flex;flex-direction:column;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line-2)}
+.dash-list-head span{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.dash-list-head input{border:1px solid var(--line);border-radius:9px;padding:9px 11px;font-size:13.5px;color:var(--ink);background:#fff}
+.dash-list-head input:focus{border-color:var(--teal)}
+.prow{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line-2);cursor:pointer;background:transparent;border-left:3px solid transparent;width:100%;text-align:left}
+.prow:hover{background:#fff}
+.prow.active{background:#fff;border-left-color:var(--teal)}
+.prow .pmeta{flex:1;min-width:0}
+.prow .pname{font-size:14px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prow .pmail{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prow .pcount{font-size:12px;font-weight:700;color:var(--teal-d);background:#e6eff0;border-radius:999px;padding:3px 9px;flex:none}
+.dash-empty{padding:60px 24px;text-align:center;color:var(--muted);font-size:14px}
+.dash-detail{background:var(--paper-2);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);min-height:200px;overflow:hidden}
+.detail-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:16px 18px;border-bottom:1px solid var(--line-2);background:#fff}
+.detail-head .dn{font-family:"Fraunces",serif;font-size:18px;font-weight:600}
+.detail-head .dm{font-size:12.5px;color:var(--muted)}
+.detail-pages{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;padding:16px 18px}
+.detail-pages button{aspect-ratio:1;border:1px solid var(--line);background:#fff;border-radius:8px;font-size:12.5px;font-weight:600;color:var(--ink);position:relative;padding:0}
+.detail-pages button:hover{border-color:var(--teal)}
+.detail-pages button.has{background:var(--ink);color:#fff;border-color:var(--ink)}
+.detail-pages button.empty{opacity:.45}
+.detail-pages button.sel{outline:3px solid var(--teal);outline-offset:1px}
+.sheet-readout{border-top:1px solid var(--line-2);padding:16px 18px;display:none}
+.sheet-readout.show{display:block}
+.ro-sec{margin-bottom:16px}
+.ro-sec h4{margin:0 0 8px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#fff;padding:6px 10px;border-radius:7px}
+.ro-sec.k h4{background:var(--ksa-knowledge)}.ro-sec.s h4{background:var(--ksa-skills)}
+.ro-sec.a h4{background:var(--ksa-attitude)}.ro-sec.p h4{background:var(--ksa-plan)}
+.ro-sec.gen h4{background:var(--ink)}.ro-sec.ev h4{background:var(--eval-red)}
+.ro-field{display:grid;grid-template-columns:210px 1fr;gap:10px;padding:5px 4px;font-size:13px;border-bottom:1px dashed var(--line-2)}
+.ro-field .rk{color:var(--muted)}
+.ro-field .rv{color:var(--ink);font-weight:500;white-space:pre-wrap;word-break:break-word}
+.ro-none{font-size:13px;color:var(--muted);padding:8px 4px}
+@media (max-width:900px){.dash-stats{grid-template-columns:repeat(2,1fr)}.dash-grid{grid-template-columns:1fr}.detail-pages{grid-template-columns:repeat(7,1fr)}.ro-field{grid-template-columns:1fr}}
+
+@media (max-width:960px){.shell{grid-template-columns:1fr}.rail{position:static}.card{grid-template-columns:1fr}.side{border-left:none;border-top:1px solid var(--line-2)}.pagegrid{max-height:none}}
+@media (max-width:560px){.fh-row{grid-template-columns:1fr}.footerblock{grid-template-columns:1fr}.plan-2{grid-template-columns:1fr}.testgrid{grid-template-columns:1fr 64px 64px 64px}.topbar-inner{flex-wrap:wrap}}
+</style>
+</head>
+<body>
+
+<!-- ============ FIRST-RUN CONFIG (only if no credentials baked in) ============ -->
+<div class="config-banner" id="configBanner" style="display:none">
+  <div class="config-card">
+    <div class="ch">
+      <h2>One-time setup: connect your Supabase project</h2>
+      <p>This links the portal to your free cloud database so every participant's sheets are stored centrally.</p>
+    </div>
+    <div class="cb">
+      <p style="font-size:13px;color:var(--muted);margin:0 0 4px">Paste the two values from your Supabase project (Settings → API Keys):</p>
+      <label>Project URL</label>
+      <input id="cfgUrl" placeholder="https://xxxxxxxx.supabase.co">
+      <label>Publishable (or anon) key</label>
+      <input id="cfgKey" placeholder="sb_publishable_...  or  eyJhbGciOi...">
+      <button class="go" id="cfgSave">Connect</button>
+      <details>
+        <summary>How do I get these + set up the database?</summary>
+        <ol>
+          <li>Go to <code>supabase.com</code> → create a free account → New project.</li>
+          <li>Open <strong>SQL Editor</strong>, paste the SQL from the setup guide, and run it (creates the <code>sheets</code> table + security rules + dashboard support).</li>
+          <li><strong>Project URL:</strong> look at your browser's address bar on any project page — it reads <code>.../project/<b>YOUR-ID</b>/...</code>. Your URL is <code>https://YOUR-ID.supabase.co</code>.</li>
+          <li><strong>Key:</strong> open <strong>Settings → API Keys</strong> and copy the <em>Publishable key</em> (starts <code>sb_publishable_</code>). The older <em>anon</em> key (starts <code>eyJ</code>, under the "Legacy" tab) also works.</li>
+          <li>For password security, in <strong>Authentication → Providers → Email</strong> turn off "Confirm email" for quick internal use, or leave it on to require email confirmation.</li>
+        </ol>
+        <p style="margin-top:10px">Once connected, the values are remembered in this browser. To bake them in permanently for everyone, edit the <code>SUPABASE_URL</code> / <code>SUPABASE_KEY</code> lines near the top of the script in this file before deploying.</p>
+      </details>
+    </div>
+  </div>
+</div>
+
+<!-- ============ AUTH GATE ============ -->
+<div class="gate" id="gate" style="display:none">
+  <div class="gatecard">
+    <div class="gh">
+      <div class="crest">KSA</div>
+      <h1>My Competency Claimer</h1>
+      <p>Linking Training to Workplace Performance</p>
+    </div>
+    <div class="gb">
+      <div class="tabs">
+        <button id="tabLogin" class="active">Log in</button>
+        <button id="tabSignup">Create account</button>
+      </div>
+
+      <div id="nameField" style="display:none">
+        <label>Full name</label>
+        <input id="auName" type="text" placeholder="Your full name" autocomplete="name">
+      </div>
+      <label>Email</label>
+      <input id="auEmail" type="email" placeholder="you@example.com" autocomplete="email">
+      <label>Password</label>
+      <input id="auPass" type="password" placeholder="At least 6 characters" autocomplete="current-password">
+      <p class="hint" id="signupHint" style="display:none">Your name and 35 competency sheets are stored securely in the cloud and reachable from any device when you log in.</p>
+
+      <button class="enter" id="authBtn">Log in</button>
+      <div class="msg" id="authMsg"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ APP ============ -->
+<div id="app" style="display:none">
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="crest">KSA</div>
+      <div class="brand">
+        <h1>My Competency Claimer</h1>
+        <div class="sub">Linking Training to Workplace Performance</div>
+        <div class="init">A BPATC–JICA Joint Knowledge Initiative</div>
+      </div>
+      <div class="spacer"></div>
+      <div class="who">
+        <span class="cloud-status"><span class="dot" id="cloudDot"></span><span id="cloudTxt">Cloud synced</span></span>
+        <button id="dashBtn" style="display:none">View dashboard</button>
+        <span class="pill" id="userPill">—</span>
+        <button id="logoutBtn">Log out</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap" id="participantView">
+    <div class="toolbar">
+      <button class="tbtn primary" id="saveBtn">Save this sheet</button>
+      <button class="tbtn" id="printBtn">Print / PDF this sheet</button>
+      <button class="tbtn" id="exportBtn">Export my data</button>
+      <button class="tbtn" id="clearBtn">Clear this sheet</button>
+    </div>
+
+    <div class="shell">
+      <aside class="rail">
+        <h2>Competency sheets</h2>
+        <div class="progress-wrap">
+          <div class="progress-bar"><div class="progress-fill" id="progFill"></div></div>
+          <div class="progress-num" id="progNum">0 of 35 started</div>
+        </div>
+        <div class="pagegrid" id="pageGrid"></div>
+        <div class="navbtns">
+          <button id="prevBtn">‹ Prev</button>
+          <button id="nextBtn">Next ›</button>
+        </div>
+        <div class="saved-note" id="savedNote"></div>
+      </aside>
+
+      <main>
+        <div class="cardhead">
+          <div class="title">Competency Claim Sheet</div>
+          <div class="pageref" id="pageRef">Sheet 1 / 35</div>
+        </div>
+        <div class="card" id="formCard"></div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ===== ORGANISER DASHBOARD ===== -->
+  <div class="wrap" id="dashboardView" style="display:none">
+    <div class="dash-head">
+      <div>
+        <div class="dash-title">Organiser dashboard</div>
+        <div class="dash-sub" id="dashSub">All participants and their progress</div>
+      </div>
+      <div class="dash-actions">
+        <button class="tbtn" id="dashRefresh">Refresh</button>
+        <button class="tbtn" id="dashCsv">Download CSV (all data)</button>
+        <button class="tbtn primary" id="backBtn">Back to my sheets</button>
+      </div>
+    </div>
+
+    <div class="dash-stats" id="dashStats"></div>
+
+    <div class="dash-grid">
+      <div class="dash-list">
+        <div class="dash-list-head">
+          <span>Participants</span>
+          <input id="dashSearch" placeholder="Search name or email…">
+        </div>
+        <div id="dashRows"></div>
+      </div>
+      <div class="dash-detail" id="dashDetail">
+        <div class="dash-empty">Select a participant to view their 35 sheets.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.min.js"></script>
+<script>
+/* ============================================================
+   My Competency Claimer — BPATC–JICA Joint Knowledge Initiative
+   Supabase backend: email/password auth + central cloud storage.
+   ============================================================ */
+
+/* ---- 1) PASTE YOUR SUPABASE CREDENTIALS HERE TO BAKE THEM IN ----
+   Leave them blank to use the on-screen one-time setup instead.
+   URL: https://YOUR-PROJECT-ID.supabase.co  (the ID is in your Supabase address bar)
+   KEY: your Publishable key (starts sb_publishable_) — the legacy anon key (eyJ...) also works. */
+let SUPABASE_URL = "";
+let SUPABASE_KEY = "";
+/* ----------------------------------------------------------------- */
+
+const TOTAL_PAGES = 35;
+const LS_CFG = "mcc_supabase_cfg_v1";
+
+let supa = null;
+let session = null;
+let profileName = "";
+let currentPage = 1;
+let store = {};            // { "1": {field:value}, ... }  cached locally, source of truth = cloud
+let saveTimer = null;
+
+/* ---------- bootstrap config ---------- */
+function getConfig(){
+  if(SUPABASE_URL && SUPABASE_KEY) return {url:SUPABASE_URL,key:SUPABASE_KEY};
+  try{
+    const c=JSON.parse(localStorage.getItem(LS_CFG)||"null");
+    if(c&&c.url&&c.key) return c;
+  }catch(e){}
+  return null;
+}
+function initSupabase(cfg){
+  supa = window.supabase.createClient(cfg.url, cfg.key);
+}
+
+/* ---------- form template (identical layout to print card) ---------- */
+function formHTML(){return `
+  <div class="main">
+    <div class="formhead">
+      <div class="fh-stack">
+        <div class="field"><label class="bn">সেশন টাইটেল • Session Title</label><input data-f="session_title" type="text"></div>
+        <div class="fh-row">
+          <div class="field"><label class="bn">কম্পিটেন্সি ডোমেইন • Competency Domain</label><input data-f="competency_domain" type="text"></div>
+          <div class="field"><label class="bn">তারিখ • Date</label><input data-f="date" type="date"></div>
+        </div>
+      </div>
+    </div>
+    ${bandHTML('k','knowledge','Cognitive','KNOWLEDGE','নলেজ থার্মোমিটার','Learning by Understanding','🧠',['Self','Facilitator','Evidence-based'])}
+    ${bandHTML('s','skills','Psychomotor','SKILLS','স্কিল থার্মোমিটার','Learning by Doing','🛠',['Screenshot','Link','Demo'])}
+    ${bandHTML('a','attitude','Affective','ATTITUDE','অ্যাটিচিউট শিফট','Learning by Feeling & Valuing','💛',['Group Work','Simulation','Self Reflection'])}
+    <div class="band p">
+      <div class="spine">KSA<small>Application Plan</small></div>
+      <div class="band-body">
+        <div class="band-strip"><span class="bn-title bn">কর্মক্ষেত্রে KSA বাস্তবায়ন কর্ম-পরিকল্পনা</span><span class="learn"><span class="ico">🏢</span>Expected Behavior at Workplace</span></div>
+        <div class="planbody">
+          <textarea data-f="plan_behavior" placeholder="Expected behavior at workplace…"></textarea>
+          <div class="plan-2">
+            <div class="field"><label class="bn">বাস্তবায়ন সময়কাল • Implementation Period</label><input data-f="plan_period" type="text"></div>
+            <div class="field"><label class="bn">পারফরম্যান্স ইন্ডিকেটর • Performance Indicator</label><input data-f="plan_indicator" type="text"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footerblock">
+      <div class="claimed"><div class="lab">Claimed<br>Competencies</div><textarea data-f="claimed" placeholder="List the competencies you claim…"></textarea></div>
+      <div class="sigs">
+        <div class="sig"><label class="bn">কম্পিটেন্সি ক্লেইমারের স্বাক্ষর</label><input data-f="sig_claimer" type="text" placeholder="Name"><div class="cap bn">কম্পিটেন্সি ক্লেইমারের স্বাক্ষর • Competency Claimer</div></div>
+        <div class="sig"><label class="bn">সিএমটি'র স্বাক্ষর</label><input data-f="sig_cmt" type="text" placeholder="Name"><div class="cap bn">সিএমটি'র স্বাক্ষর • CMT</div></div>
+      </div>
+    </div>
+  </div>
+  <aside class="side">
+    <div class="side-head bn">সেশন মূল্যায়ন • Session Evaluation</div>
+    <div class="side-inner">
+      <div class="field"><label class="bn">বক্তার নাম • Speaker's Name</label><input data-f="ev_speaker" type="text"></div>
+      <div class="q"><div class="qt bn">সেশনটির মূল ফোকাস <span class="en">/ Main focus</span></div>
+        <div class="optset">${chk('ev_focus_knowledge','Knowledge')}${chk('ev_focus_skills','Skills')}${chk('ev_focus_attitudes','Attitudes')}</div></div>
+      <div class="q"><div class="qt bn">সেশনটিতে কোন ধরনের নলেজ শেয়ার করা হয়েছে <span class="en">/ Type of knowledge</span></div>
+        <div class="optset" style="flex-direction:column;align-items:flex-start;gap:7px">${chk('ev_kn_declarative','Declarative')}${chk('ev_kn_procedural','Procedural')}${chk('ev_kn_conceptual','Conceptual')}</div></div>
+      <hr>
+      ${ynScore('ev_q1','বাস্তবধর্মী উদাহরণসহ বিষয়টি স্পষ্ট করা হয়েছে কিনা?','Made clear with real examples')}
+      ${ynScore('ev_q2','সেশনে কোনো হার্ড স্কিল হাতে-কলমে প্রদর্শন করা হয়েছে কি না?','Hard skill demonstrated hands-on')}
+      ${ynScore('ev_q3','সেশনে সফট স্কিল/Attitude বিষয়ে আমার চিন্তা ও দৃষ্টিভঙ্গিতে কোন পরিবর্তন এসেছে কি না?','Change in attitude / soft skill')}
+      ${ynScore('ev_q4','অর্জিত নলেজ-স্কিল-এটিচিউট কর্মস্থলের জন্য কর্মপরিকল্পনায় অনুপ্রাণিত করা হয়েছে কি না?','Motivated a workplace action plan')}
+      <hr>
+      <div class="q"><div class="feedlab bn">✍ সেশনের সবচেয়ে গুরুত্বপূর্ণ ফিডব্যাক <span class="en" style="font-weight:400">/ Most important feedback</span></div>
+        <textarea data-f="ev_feedback" placeholder="Most important takeaway / feedback…"></textarea></div>
+    </div>
+  </aside>`;}
+
+function bandHTML(cls,key,en1,en2,bnTitle,learn,ico,opts){return `
+  <div class="band ${cls}">
+    <div class="spine">${en1}<small>${en2}</small></div>
+    <div class="band-body">
+      <div class="band-strip"><span class="bn-title bn">${bnTitle}</span><span class="learn"><span class="ico">${ico}</span>${learn}</span></div>
+      <div class="testgrid">
+        <div class="th first">&nbsp;</div><div class="th bn">প্রি-টেস্ট<br>Pre-Test</div><div class="th bn">পোস্ট টেস্ট<br>Post-Test</div><div class="th bn">অর্জন<br>Gain</div>
+        ${[0,1,2].map(r=>`
+          <div class="cell first"><input class="note" data-f="${key}_item${r}" type="text" placeholder="Competency / indicator…"></div>
+          <div class="cell"><input class="num" data-f="${key}_pre${r}" type="number" min="0" inputmode="numeric"></div>
+          <div class="cell"><input class="num" data-f="${key}_post${r}" type="number" min="0" inputmode="numeric"></div>
+          <div class="cell"><input class="num" data-f="${key}_gain${r}" type="number" inputmode="numeric"></div>`).join('')}
+      </div>
+      <div class="evalrow"><span class="lbl bn">মূল্যায়নের ধরণ • Type</span>
+        <div class="checks">${opts.map((o,i)=>chk(`${key}_evtype${i}`,o)).join('')}</div>
+        <span class="total bn">সর্বমোট অর্জন • <input data-f="${key}_total" type="number" min="0" max="100" placeholder="%"> %</span>
+      </div>
+    </div>
+  </div>`;}
+
+function chk(field,label){return `<label class="chk"><input type="checkbox" data-f="${field}"><span>${label}</span></label>`;}
+function ynScore(base,bnQ,enQ){return `
+  <div class="q"><div class="qt bn">${bnQ} <span class="en">/ ${enQ}</span></div>
+    <div class="optset"><div class="yn">
+      <label class="chk"><input type="radio" name="${base}_yn" data-f="${base}_yn" value="yes"><span class="bn">হ্যাঁ Yes</span></label>
+      <label class="chk"><input type="radio" name="${base}_yn" data-f="${base}_yn" value="no"><span class="bn">না No</span></label>
+    </div><span class="score bn">মূল্যায়ন (0–৫) <input data-f="${base}_score" type="number" min="0" max="5" inputmode="numeric"></span></div>
+  </div>`;}
+
+/* ---------- render ---------- */
+function renderForm(){
+  const card=document.getElementById('formCard');
+  card.innerHTML=formHTML();
+  card.querySelectorAll('[data-f]').forEach(el=>{
+    const f=el.dataset.f, pd=store[currentPage]||{};
+    if(el.type==='checkbox'){el.checked=!!pd[f];el.addEventListener('change',()=>updateField(f,el.checked));}
+    else if(el.type==='radio'){if(pd[el.name]===el.value)el.checked=true;el.addEventListener('change',()=>{if(el.checked)updateField(el.name,el.value);});}
+    else {if(pd[f]!==undefined)el.value=pd[f];el.addEventListener('input',()=>updateField(f,el.value));}
+  });
+  document.getElementById('pageRef').textContent=`Sheet ${currentPage} / ${TOTAL_PAGES}`;
+}
+function updateField(field,value){
+  if(!store[currentPage])store[currentPage]={};
+  if(value===''||value===false||value==null)delete store[currentPage][field];
+  else store[currentPage][field]=value;
+  if(store[currentPage]&&Object.keys(store[currentPage]).length===0)delete store[currentPage];
+  scheduleSave();refreshGridDot(currentPage);refreshProgress();
+}
+
+/* ---------- cloud sync ---------- */
+function setCloud(state){ // 'ok' | 'syncing' | 'err'
+  const d=document.getElementById('cloudDot'),t=document.getElementById('cloudTxt');
+  d.className='dot'+(state==='syncing'?' syncing':state==='err'?' err':'');
+  t.textContent=state==='syncing'?'Saving…':state==='err'?'Sync error':'Cloud synced';
+}
+function scheduleSave(){
+  clearTimeout(saveTimer);
+  document.getElementById('savedNote').textContent="Saving…";setCloud('syncing');
+  saveTimer=setTimeout(saveCurrentPage,500);
+}
+async function saveCurrentPage(){
+  const data=store[currentPage]||{};
+  try{
+    const {error}=await supa.from('sheets').upsert({
+      user_id:session.user.id, page:currentPage, data:data,
+      participant_name:profileName, updated_at:new Date().toISOString()
+    },{onConflict:'user_id,page'});
+    if(error)throw error;
+    setCloud('ok');
+    const n=document.getElementById('savedNote');n.textContent="Saved to cloud";
+    setTimeout(()=>{if(n.textContent==="Saved to cloud")n.textContent="";},1600);
+  }catch(e){ setCloud('err'); document.getElementById('savedNote').textContent="Couldn't sync"; }
+}
+async function loadAllSheets(){
+  const {data,error}=await supa.from('sheets').select('page,data').eq('user_id',session.user.id);
+  store={};
+  if(!error&&data){data.forEach(r=>{ if(r.data&&Object.keys(r.data).length)store[r.page]=r.data; });}
+}
+
+/* ---------- page nav ---------- */
+function buildGrid(){
+  const g=document.getElementById('pageGrid');g.innerHTML='';
+  for(let i=1;i<=TOTAL_PAGES;i++){
+    const b=document.createElement('button');b.textContent=i;b.dataset.p=i;
+    if(i===currentPage)b.classList.add('active');
+    if(isStarted(i))b.classList.add('done');
+    b.addEventListener('click',()=>gotoPage(i));g.appendChild(b);
+  }
+}
+function refreshGridDot(p){const b=document.querySelector(`.pagegrid button[data-p="${p}"]`);if(b)b.classList.toggle('done',isStarted(p));}
+function isStarted(p){return store[p]&&Object.keys(store[p]).length>0;}
+function startedCount(){let c=0;for(let i=1;i<=TOTAL_PAGES;i++)if(isStarted(i))c++;return c;}
+function refreshProgress(){const c=startedCount();document.getElementById('progFill').style.width=(c/TOTAL_PAGES*100)+'%';document.getElementById('progNum').textContent=`${c} of ${TOTAL_PAGES} started`;}
+function gotoPage(p){if(p<1||p>TOTAL_PAGES)return;currentPage=p;document.querySelectorAll('.pagegrid button').forEach(b=>b.classList.toggle('active',+b.dataset.p===p));renderForm();window.scrollTo({top:0,behavior:'smooth'});}
+
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+
+/* ---------- auth ---------- */
+let authMode='login';
+function setAuthMode(m){
+  authMode=m;
+  document.getElementById('tabLogin').classList.toggle('active',m==='login');
+  document.getElementById('tabSignup').classList.toggle('active',m==='signup');
+  document.getElementById('nameField').style.display=m==='signup'?'block':'none';
+  document.getElementById('signupHint').style.display=m==='signup'?'block':'none';
+  document.getElementById('authBtn').textContent=m==='signup'?'Create account':'Log in';
+  document.getElementById('auPass').autocomplete=m==='signup'?'new-password':'current-password';
+  showMsg('');
+}
+function showMsg(text,kind){
+  const m=document.getElementById('authMsg');
+  if(!text){m.className='msg';m.textContent='';return;}
+  m.className='msg show '+(kind||'info');m.textContent=text;
+}
+async function doAuth(){
+  const email=document.getElementById('auEmail').value.trim();
+  const pass=document.getElementById('auPass').value;
+  const name=document.getElementById('auName').value.trim();
+  const btn=document.getElementById('authBtn');
+  if(!email||!pass){showMsg('Enter your email and password.','err');return;}
+  if(authMode==='signup'&&!name){showMsg('Enter your full name.','err');return;}
+  if(pass.length<6){showMsg('Password must be at least 6 characters.','err');return;}
+  btn.disabled=true;
+  try{
+    if(authMode==='signup'){
+      const {data,error}=await supa.auth.signUp({email,password:pass,options:{data:{full_name:name}}});
+      if(error)throw error;
+      if(data.session){ await onLoggedIn(data.session); }
+      else { showMsg('Account created. Please check your email to confirm, then log in.','ok'); setAuthMode('login'); }
+    } else {
+      const {data,error}=await supa.auth.signInWithPassword({email,password:pass});
+      if(error)throw error;
+      await onLoggedIn(data.session);
+    }
+  }catch(e){ showMsg(e.message||'Authentication failed.','err'); }
+  finally{ btn.disabled=false; }
+}
+async function onLoggedIn(sess){
+  session=sess;
+  profileName=(sess.user.user_metadata&&sess.user.user_metadata.full_name)||sess.user.email;
+  document.getElementById('gate').style.display='none';
+  document.getElementById('app').style.display='block';
+  document.getElementById('userPill').textContent=profileName;
+  setCloud('syncing');
+  await loadAllSheets();
+  currentPage=1;buildGrid();refreshProgress();renderForm();setCloud('ok');
+  checkOrganizer();
+}
+async function checkOrganizer(){
+  try{
+    const {data,error}=await supa.rpc('is_organizer');
+    if(!error && data===true){ document.getElementById('dashBtn').style.display='inline-block'; }
+  }catch(e){ /* not an organiser or function missing; hide silently */ }
+}
+async function logout(){ await supa.auth.signOut(); location.reload(); }
+
+/* ---------- export ---------- */
+function exportData(){
+  const payload={portal:"My Competency Claimer",user:profileName,email:session.user.email,exported:new Date().toISOString(),pages:store};
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');
+  a.href=url;a.download=`competency-claimer_${profileName.replace(/\s+/g,'-')}.json`;a.click();URL.revokeObjectURL(url);
+  toast('Exported your data');
+}
+
+/* ---------- ORGANISER DASHBOARD ---------- */
+let dashData=[];        // raw rows from get_all_sheets()
+let dashByUser={};      // user_id -> {name,email,pages:{page:data}}
+let dashSelected=null;
+let dashSelectedPage=null;
+
+const FIELD_LABELS={
+  session_title:"Session title",competency_domain:"Competency domain",date:"Date",
+  plan_behavior:"Expected behavior at workplace",plan_period:"Implementation period",plan_indicator:"Performance indicator",
+  claimed:"Claimed competencies",sig_claimer:"Claimer signature",sig_cmt:"CMT signature",
+  ev_speaker:"Speaker's name",ev_feedback:"Most important feedback"
+};
+const KSA_LABEL={knowledge:"Cognitive — Knowledge",skills:"Psychomotor — Skills",attitude:"Affective — Attitude"};
+const EVTYPE={knowledge:["Self","Facilitator","Evidence-based"],skills:["Screenshot","Link","Demo"],attitude:["Group Work","Simulation","Self Reflection"]};
+
+async function openDashboard(){
+  document.getElementById('participantView').style.display='none';
+  document.getElementById('dashboardView').style.display='block';
+  document.getElementById('dashBtn').textContent='Refresh ↻';
+  await loadDashboard();
+}
+function closeDashboard(){
+  document.getElementById('dashboardView').style.display='none';
+  document.getElementById('participantView').style.display='block';
+}
+async function loadDashboard(){
+  const rowsEl=document.getElementById('dashRows');
+  rowsEl.innerHTML='<div class="dash-empty">Loading…</div>';
+  try{
+    const {data,error}=await supa.rpc('get_all_sheets');
+    if(error)throw error;
+    dashData=data||[];
+    dashByUser={};
+    dashData.forEach(r=>{
+      if(!dashByUser[r.user_id]) dashByUser[r.user_id]={name:r.participant_name||'(no name)',email:r.email||'',pages:{}};
+      if(r.data&&Object.keys(r.data).length) dashByUser[r.user_id].pages[r.page]=r.data;
+    });
+    renderDashStats();
+    renderDashList('');
+    if(Object.keys(dashByUser).length===0){
+      document.getElementById('dashDetail').innerHTML='<div class="dash-empty">No participant data yet.</div>';
+    }
+  }catch(e){
+    rowsEl.innerHTML='<div class="dash-empty">Could not load data. Make sure the dashboard SQL has been run and your email is in the organizers table.</div>';
+  }
+}
+function renderDashStats(){
+  const users=Object.values(dashByUser);
+  const participants=users.length;
+  let totalStarted=0, completed=0;
+  users.forEach(u=>{const n=Object.keys(u.pages).length;totalStarted+=n;if(n>=TOTAL_PAGES)completed++;});
+  const avg=participants?Math.round(totalStarted/participants):0;
+  const fillPct=participants?Math.round(totalStarted/(participants*TOTAL_PAGES)*100):0;
+  const el=document.getElementById('dashStats');
+  el.innerHTML=`
+    ${stat(participants,'Participants')}
+    ${stat(totalStarted,'Sheets filled (of '+(participants*TOTAL_PAGES||0)+')',fillPct)}
+    ${stat(avg+' / '+TOTAL_PAGES,'Avg sheets / participant')}
+    ${stat(completed,'Completed all '+TOTAL_PAGES)}`;
+  document.getElementById('dashSub').textContent=`${participants} participant${participants===1?'':'s'} • ${totalStarted} sheet${totalStarted===1?'':'s'} filled`;
+}
+function stat(n,l,barPct){
+  return `<div class="stat"><div class="n">${n}</div><div class="l">${l}</div>${barPct!=null?`<div class="bar"><i style="width:${barPct}%"></i></div>`:''}</div>`;
+}
+function renderDashList(filter){
+  const rowsEl=document.getElementById('dashRows');
+  const f=(filter||'').toLowerCase();
+  const entries=Object.entries(dashByUser)
+    .filter(([id,u])=>!f||u.name.toLowerCase().includes(f)||u.email.toLowerCase().includes(f))
+    .sort((a,b)=>a[1].name.localeCompare(b[1].name));
+  if(!entries.length){ rowsEl.innerHTML='<div class="dash-empty">No matches.</div>'; return; }
+  rowsEl.innerHTML='';
+  entries.forEach(([id,u])=>{
+    const b=document.createElement('button');
+    b.className='prow'+(id===dashSelected?' active':'');
+    b.innerHTML=`<div class="pmeta"><div class="pname">${esc(u.name)}</div><div class="pmail">${esc(u.email)}</div></div>
+      <span class="pcount">${Object.keys(u.pages).length}/${TOTAL_PAGES}</span>`;
+    b.addEventListener('click',()=>selectParticipant(id));
+    rowsEl.appendChild(b);
+  });
+}
+function selectParticipant(id){
+  dashSelected=id; dashSelectedPage=null;
+  document.querySelectorAll('.prow').forEach(r=>r.classList.remove('active'));
+  renderDashList(document.getElementById('dashSearch').value);
+  const u=dashByUser[id];
+  const detail=document.getElementById('dashDetail');
+  const filled=Object.keys(u.pages).map(Number).sort((a,b)=>a-b);
+  let pagesHTML='';
+  for(let i=1;i<=TOTAL_PAGES;i++){
+    const has=!!u.pages[i];
+    pagesHTML+=`<button class="${has?'has':'empty'}" data-pg="${i}">${i}</button>`;
+  }
+  detail.innerHTML=`
+    <div class="detail-head">
+      <div><div class="dn">${esc(u.name)}</div><div class="dm">${esc(u.email)} • ${filled.length} of ${TOTAL_PAGES} sheets filled</div></div>
+    </div>
+    <div class="detail-pages">${pagesHTML}</div>
+    <div class="sheet-readout" id="sheetReadout"></div>`;
+  detail.querySelectorAll('.detail-pages button').forEach(btn=>{
+    btn.addEventListener('click',()=>showSheet(id,+btn.dataset.pg,btn));
+  });
+}
+function showSheet(uid,page,btn){
+  document.querySelectorAll('.detail-pages button').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  dashSelectedPage=page;
+  const data=dashByUser[uid].pages[page];
+  const out=document.getElementById('sheetReadout');
+  out.classList.add('show');
+  if(!data){ out.innerHTML=`<div class="ro-none">Sheet ${page} has no entries.</div>`; return; }
+  out.innerHTML=`<h3 style="margin:0 0 14px;font-family:Fraunces,serif">Sheet ${page}</h3>`+readoutHTML(data);
+}
+function readoutHTML(d){
+  let h='';
+  // general
+  const gen=[['session_title'],['competency_domain'],['date']].map(([k])=>field(k,d[k])).filter(Boolean).join('');
+  if(gen) h+=sec('gen','Session',gen);
+  // KSA bands
+  ['knowledge','skills','attitude'].forEach((key,idx)=>{
+    const cls=['k','s','a'][idx];
+    let rows='';
+    for(let r=0;r<3;r++){
+      const item=d[`${key}_item${r}`],pre=d[`${key}_pre${r}`],post=d[`${key}_post${r}`],gain=d[`${key}_gain${r}`];
+      if(item||pre||post||gain){
+        rows+=roRow(`Item ${r+1}`, [item,pre!=null?`Pre ${pre}`:'',post!=null?`Post ${post}`:'',gain!=null?`Gain ${gain}`:''].filter(Boolean).join('  •  '));
+      }
+    }
+    const types=EVTYPE[key].filter((_,i)=>d[`${key}_evtype${i}`]).join(', ');
+    if(types) rows+=roRow('Evaluation type',types);
+    if(d[`${key}_total`]!=null&&d[`${key}_total`]!=='') rows+=roRow('Total achieved',d[`${key}_total`]+'%');
+    if(rows) h+=sec(cls,KSA_LABEL[key],rows);
+  });
+  // plan
+  const plan=[field('plan_behavior',d.plan_behavior),field('plan_period',d.plan_period),field('plan_indicator',d.plan_indicator)].filter(Boolean).join('');
+  if(plan) h+=sec('p','KSA Application Plan',plan);
+  // claimed + sigs
+  const claimed=[field('claimed',d.claimed),field('sig_claimer',d.sig_claimer),field('sig_cmt',d.sig_cmt)].filter(Boolean).join('');
+  if(claimed) h+=sec('gen','Claimed competencies & signatures',claimed);
+  // evaluation
+  let ev='';
+  ev+=field('ev_speaker',d.ev_speaker);
+  const focus=['knowledge','skills','attitudes'].filter(x=>d['ev_focus_'+x]).map(cap).join(', ');
+  if(focus) ev+=roRow('Main focus',focus);
+  const kn=['declarative','procedural','conceptual'].filter(x=>d['ev_kn_'+x]).map(cap).join(', ');
+  if(kn) ev+=roRow('Knowledge type',kn);
+  [['ev_q1','Clear with real examples'],['ev_q2','Hard skill demonstrated'],['ev_q3','Attitude/soft-skill change'],['ev_q4','Motivated action plan']].forEach(([b,lbl])=>{
+    const yn=d[b+'_yn'],sc=d[b+'_score'];
+    if(yn||sc!=null&&sc!=='') ev+=roRow(lbl,[yn?cap(yn):'',sc!=null&&sc!==''?`score ${sc}/5`:''].filter(Boolean).join('  •  '));
+  });
+  ev+=field('ev_feedback',d.ev_feedback);
+  if(ev) h+=sec('ev','Session evaluation',ev);
+  return h||'<div class="ro-none">No entries.</div>';
+}
+function sec(cls,title,inner){return `<div class="ro-sec ${cls}"><h4>${title}</h4>${inner}</div>`;}
+function field(key,val){ if(val==null||val==='')return''; return roRow(FIELD_LABELS[key]||key,val); }
+function roRow(k,v){return `<div class="ro-field"><div class="rk">${esc(k)}</div><div class="rv">${esc(String(v))}</div></div>`;}
+function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+function esc(s){return (s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+
+function dashCSV(){
+  // one row per (participant, page, field)=value — fully flat & spreadsheet-friendly
+  const lines=[['Participant','Email','Sheet','Field','Value']];
+  Object.values(dashByUser).forEach(u=>{
+    Object.keys(u.pages).map(Number).sort((a,b)=>a-b).forEach(pg=>{
+      const d=u.pages[pg];
+      Object.keys(d).forEach(f=>{
+        lines.push([u.name,u.email,pg,f,d[f]]);
+      });
+    });
+  });
+  const csv=lines.map(row=>row.map(c=>{
+    const s=String(c==null?'':c);
+    return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;
+  }).join(',')).join('\n');
+  const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');
+  a.href=url;a.download=`competency-claimer_all-participants_${new Date().toISOString().slice(0,10)}.csv`;a.click();URL.revokeObjectURL(url);
+  toast('CSV downloaded');
+}
+
+/* ---------- wire up ---------- */
+document.getElementById('dashBtn').addEventListener('click',openDashboard);
+document.getElementById('backBtn').addEventListener('click',closeDashboard);
+document.getElementById('dashRefresh').addEventListener('click',loadDashboard);
+document.getElementById('dashCsv').addEventListener('click',dashCSV);
+document.getElementById('dashSearch').addEventListener('input',e=>renderDashList(e.target.value));
+document.getElementById('tabLogin').addEventListener('click',()=>setAuthMode('login'));
+document.getElementById('tabSignup').addEventListener('click',()=>setAuthMode('signup'));
+document.getElementById('authBtn').addEventListener('click',doAuth);
+document.getElementById('auPass').addEventListener('keydown',e=>{if(e.key==='Enter')doAuth();});
+document.getElementById('logoutBtn').addEventListener('click',logout);
+document.getElementById('prevBtn').addEventListener('click',()=>gotoPage(currentPage-1));
+document.getElementById('nextBtn').addEventListener('click',()=>gotoPage(currentPage+1));
+document.getElementById('saveBtn').addEventListener('click',()=>{saveCurrentPage();toast('Saved to cloud');});
+document.getElementById('printBtn').addEventListener('click',()=>window.print());
+document.getElementById('exportBtn').addEventListener('click',exportData);
+document.getElementById('clearBtn').addEventListener('click',async()=>{
+  if(confirm(`Clear all entries on Sheet ${currentPage}? This cannot be undone.`)){
+    delete store[currentPage];
+    try{ await supa.from('sheets').delete().eq('user_id',session.user.id).eq('page',currentPage); }catch(e){}
+    renderForm();refreshGridDot(currentPage);refreshProgress();toast(`Sheet ${currentPage} cleared`);
+  }
+});
+document.addEventListener('keydown',e=>{
+  if(document.getElementById('app').style.display==='none')return;
+  if(e.target.matches('input,textarea'))return;
+  if(e.key==='ArrowRight')gotoPage(currentPage+1);
+  if(e.key==='ArrowLeft')gotoPage(currentPage-1);
+});
+
+/* config screen */
+document.getElementById('cfgSave').addEventListener('click',()=>{
+  const url=document.getElementById('cfgUrl').value.trim().replace(/\/$/,'');
+  const key=document.getElementById('cfgKey').value.trim();
+  if(!url||!key){alert('Please paste both the Project URL and the anon key.');return;}
+  localStorage.setItem(LS_CFG,JSON.stringify({url,key}));
+  location.reload();
+});
+
+/* ---------- boot ---------- */
+(async function boot(){
+  const cfg=getConfig();
+  if(!cfg){ document.getElementById('configBanner').style.display='grid'; return; }
+  if(!window.supabase||!window.supabase.createClient){
+    document.getElementById('gate').style.display='grid';
+    setAuthMode('login');
+    showMsg('Could not load the secure connection library. Check your internet connection and refresh the page.','err');
+    return;
+  }
+  initSupabase(cfg);
+  // Show the login gate right away; restore an existing session in the background.
+  document.getElementById('gate').style.display='grid';
+  setAuthMode('login');
+  try{
+    const {data}=await supa.auth.getSession();
+    if(data&&data.session){ await onLoggedIn(data.session); }
+  }catch(e){ /* stay on gate */ }
+})();
+</script>
+</body>
+</html>
