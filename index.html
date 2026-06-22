@@ -53,6 +53,9 @@ button{font-family:inherit;cursor:pointer}input,textarea{font-family:inherit}
 .pagegrid button:hover{border-color:var(--teal)}
 .pagegrid button.active{background:var(--ink);color:#fff;border-color:var(--ink)}
 .pagegrid button.done::after{content:"";position:absolute;top:4px;right:4px;width:7px;height:7px;border-radius:50%;background:var(--ksa-plan)}
+.pagegrid button.submitted{background:var(--ksa-plan);color:#fff;border-color:var(--ksa-plan)}
+.pagegrid button.submitted::after{background:#fff}
+.pagegrid button.submitted.active{box-shadow:0 0 0 2px var(--ink) inset}
 .pagegrid button.active.done::after{background:#9be59f}
 .rail .navbtns{display:flex;gap:8px;margin-top:14px}
 .rail .navbtns button{flex:1;border:1px solid var(--line);background:#fff;border-radius:9px;padding:9px 0;font-size:13px;font-weight:600;color:var(--ink)}
@@ -91,6 +94,10 @@ button{font-family:inherit;cursor:pointer}input,textarea{font-family:inherit}
 .testgrid input.num{width:100%;border:none;background:transparent;text-align:center;padding:9px 2px;font-size:14px;color:var(--ink)}
 .testgrid input.note{width:100%;border:none;background:transparent;padding:9px 12px;font-size:13px;color:var(--ink)}
 .testgrid input:focus{background:#fff7e6}
+.band-notes{padding:12px 14px;border-bottom:1px solid var(--line-2);background:#fff}
+.band-notes label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:600}
+.band-notes textarea{width:100%;min-height:64px;resize:vertical;border:1px solid var(--line);border-radius:10px;padding:9px 11px;font-size:13.5px;color:var(--ink);background:var(--paper-2);font-family:inherit}
+.band-notes textarea:focus{background:#fff;border-color:var(--teal)}
 
 .evalrow{display:flex;align-items:center;gap:16px;padding:10px 14px;flex-wrap:wrap;border-bottom:1px solid var(--line-2);background:var(--paper-2)}
 .evalrow .lbl{font-size:12.5px;color:var(--muted);font-weight:600}
@@ -170,6 +177,13 @@ button{font-family:inherit;cursor:pointer}input,textarea{font-family:inherit}
 .config-card summary{cursor:pointer;font-weight:600;color:var(--teal-d)}
 
 .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 16px}
+.submitbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:18px;padding:16px 18px;background:var(--paper-2);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+.submitbar-note{font-size:12.5px;color:var(--muted);max-width:60%}
+.submit-btn{border:none;background:var(--ksa-plan);color:#fff;border-radius:11px;padding:13px 28px;font-size:15px;font-weight:700;box-shadow:0 4px 14px rgba(46,125,50,.28)}
+.submit-btn:hover{background:#256628}
+.submit-btn.done{background:var(--teal)}
+.submit-btn.done:hover{background:var(--teal-d)}
+.submitted-badge{font-size:12px;font-weight:700;color:#1e6b2c;background:#e9f6ec;border:1px solid #bfe2c6;border-radius:999px;padding:5px 12px}
 .tbtn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 14px;font-size:13px;font-weight:600;color:var(--ink);display:inline-flex;align-items:center;gap:7px}
 .tbtn:hover{background:var(--paper);border-color:var(--teal)}
 .tbtn.primary{background:var(--teal);color:#fff;border-color:var(--teal)}
@@ -337,9 +351,16 @@ button{font-family:inherit;cursor:pointer}input,textarea{font-family:inherit}
       <main>
         <div class="cardhead">
           <div class="title">Competency Claim Sheet</div>
-          <div class="pageref" id="pageRef">Sheet 1 / 35</div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <span class="submitted-badge" id="submittedBadge" style="display:none">✓ Submitted</span>
+            <div class="pageref" id="pageRef">Sheet 1 / 35</div>
+          </div>
         </div>
         <div class="card" id="formCard"></div>
+        <div class="submitbar">
+          <div class="submitbar-note" id="submitNote">Your entries save automatically. Press Submit when this sheet is complete.</div>
+          <button class="submit-btn" id="submitBtn">Submit Sheet 1</button>
+        </div>
       </main>
     </div>
   </div>
@@ -483,6 +504,10 @@ function bandHTML(cls,key,en1,en2,bnTitle,learn,ico,opts){return `
           <div class="cell"><input class="num" data-f="${key}_post${r}" type="number" min="0" inputmode="numeric"></div>
           <div class="cell"><input class="num" data-f="${key}_gain${r}" type="number" inputmode="numeric"></div>`).join('')}
       </div>
+      <div class="band-notes">
+        <label class="bn">নোট / বিবরণ • Notes &amp; description</label>
+        <textarea data-f="${key}_notes" placeholder="Write about what was learned, evidence, reflections…"></textarea>
+      </div>
       <div class="evalrow"><span class="lbl bn">মূল্যায়নের ধরণ • Type</span>
         <div class="checks">${opts.map((o,i)=>chk(`${key}_evtype${i}`,o)).join('')}</div>
         <span class="total bn">সর্বমোট অর্জন • <input data-f="${key}_total" type="number" min="0" max="100" placeholder="%"> %</span>
@@ -510,6 +535,19 @@ function renderForm(){
     else {if(pd[f]!==undefined)el.value=pd[f];el.addEventListener('input',()=>updateField(f,el.value));}
   });
   document.getElementById('pageRef').textContent=`Sheet ${currentPage} / ${TOTAL_PAGES}`;
+  refreshSubmitUI();
+}
+function refreshSubmitUI(){
+  const submitted = !!(store[currentPage] && store[currentPage]._submitted);
+  const badge=document.getElementById('submittedBadge');
+  const btn=document.getElementById('submitBtn');
+  const note=document.getElementById('submitNote');
+  badge.style.display = submitted ? 'inline-block' : 'none';
+  btn.textContent = submitted ? `Submitted ✓ — Update Sheet ${currentPage}` : `Submit Sheet ${currentPage}`;
+  btn.classList.toggle('done', submitted);
+  note.textContent = submitted
+    ? 'This sheet is marked submitted. You can still edit it — changes save automatically.'
+    : 'Your entries save automatically. Press Submit when this sheet is complete.';
 }
 function updateField(field,value){
   if(!store[currentPage])store[currentPage]={};
@@ -556,13 +594,20 @@ function buildGrid(){
     const b=document.createElement('button');b.textContent=i;b.dataset.p=i;
     if(i===currentPage)b.classList.add('active');
     if(isStarted(i))b.classList.add('done');
+    if(isSubmitted(i))b.classList.add('submitted');
     b.addEventListener('click',()=>gotoPage(i));g.appendChild(b);
   }
 }
-function refreshGridDot(p){const b=document.querySelector(`.pagegrid button[data-p="${p}"]`);if(b)b.classList.toggle('done',isStarted(p));}
-function isStarted(p){return store[p]&&Object.keys(store[p]).length>0;}
+function refreshGridDot(p){const b=document.querySelector(`.pagegrid button[data-p="${p}"]`);if(b){b.classList.toggle('done',isStarted(p));b.classList.toggle('submitted',isSubmitted(p));}}
+function isStarted(p){ if(!store[p])return false; return Object.keys(store[p]).some(k=>k!=='_submitted'); }
+function isSubmitted(p){ return !!(store[p] && store[p]._submitted); }
 function startedCount(){let c=0;for(let i=1;i<=TOTAL_PAGES;i++)if(isStarted(i))c++;return c;}
-function refreshProgress(){const c=startedCount();document.getElementById('progFill').style.width=(c/TOTAL_PAGES*100)+'%';document.getElementById('progNum').textContent=`${c} of ${TOTAL_PAGES} started`;}
+function submittedCount(){let c=0;for(let i=1;i<=TOTAL_PAGES;i++)if(isSubmitted(i))c++;return c;}
+function refreshProgress(){
+  const c=startedCount(),s=submittedCount();
+  document.getElementById('progFill').style.width=(c/TOTAL_PAGES*100)+'%';
+  document.getElementById('progNum').textContent=`${c} of ${TOTAL_PAGES} started • ${s} submitted`;
+}
 function gotoPage(p){if(p<1||p>TOTAL_PAGES)return;currentPage=p;document.querySelectorAll('.pagegrid button').forEach(b=>b.classList.toggle('active',+b.dataset.p===p));renderForm();window.scrollTo({top:0,behavior:'smooth'});}
 
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
@@ -643,6 +688,7 @@ let dashSelectedPage=null;
 
 const FIELD_LABELS={
   session_title:"Session title",competency_domain:"Competency domain",date:"Date",
+  knowledge_notes:"Knowledge notes",skills_notes:"Skills notes",attitude_notes:"Attitude notes",
   plan_behavior:"Expected behavior at workplace",plan_period:"Implementation period",plan_indicator:"Performance indicator",
   claimed:"Claimed competencies",sig_claimer:"Claimer signature",sig_cmt:"CMT signature",
   ev_speaker:"Speaker's name",ev_feedback:"Most important feedback"
@@ -750,6 +796,12 @@ function showSheet(uid,page,btn){
 }
 function readoutHTML(d){
   let h='';
+  if(d._submitted){
+    const t=new Date(d._submitted);
+    h+=`<div style="margin:0 0 12px;font-size:13px;font-weight:700;color:#1e6b2c;background:#e9f6ec;border:1px solid #bfe2c6;border-radius:9px;padding:8px 12px;display:inline-block">✓ Submitted ${isNaN(t)?'':t.toLocaleDateString()+' '+t.toLocaleTimeString()}</div>`;
+  } else {
+    h+=`<div style="margin:0 0 12px;font-size:13px;color:var(--muted)">Not yet submitted (draft)</div>`;
+  }
   // general
   const gen=[['session_title'],['competency_domain'],['date']].map(([k])=>field(k,d[k])).filter(Boolean).join('');
   if(gen) h+=sec('gen','Session',gen);
@@ -766,6 +818,7 @@ function readoutHTML(d){
     const types=EVTYPE[key].filter((_,i)=>d[`${key}_evtype${i}`]).join(', ');
     if(types) rows+=roRow('Evaluation type',types);
     if(d[`${key}_total`]!=null&&d[`${key}_total`]!=='') rows+=roRow('Total achieved',d[`${key}_total`]+'%');
+    if(d[`${key}_notes`]) rows+=roRow('Notes',d[`${key}_notes`]);
     if(rows) h+=sec(cls,KSA_LABEL[key],rows);
   });
   // plan
@@ -797,12 +850,14 @@ function esc(s){return (s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;'
 
 function dashCSV(){
   // one row per (participant, page, field)=value — fully flat & spreadsheet-friendly
-  const lines=[['Participant','Email','Sheet','Field','Value']];
+  const lines=[['Participant','Email','Sheet','Submitted','Field','Value']];
   Object.values(dashByUser).forEach(u=>{
     Object.keys(u.pages).map(Number).sort((a,b)=>a-b).forEach(pg=>{
       const d=u.pages[pg];
+      const sub=d._submitted?('Yes ('+d._submitted+')'):'No';
       Object.keys(d).forEach(f=>{
-        lines.push([u.name,u.email,pg,f,d[f]]);
+        if(f==='_submitted')return;
+        lines.push([u.name,u.email,pg,sub,(FIELD_LABELS[f]||f),d[f]]);
       });
     });
   });
@@ -830,6 +885,16 @@ document.getElementById('logoutBtn').addEventListener('click',logout);
 document.getElementById('prevBtn').addEventListener('click',()=>gotoPage(currentPage-1));
 document.getElementById('nextBtn').addEventListener('click',()=>gotoPage(currentPage+1));
 document.getElementById('saveBtn').addEventListener('click',()=>{saveCurrentPage();toast('Saved to cloud');});
+document.getElementById('submitBtn').addEventListener('click',async()=>{
+  if(!store[currentPage] || !Object.keys(store[currentPage]).some(k=>k!=='_submitted')){
+    toast('Add some entries before submitting'); return;
+  }
+  store[currentPage]._submitted = new Date().toISOString();
+  setCloud('syncing');
+  await saveCurrentPage();
+  refreshSubmitUI(); refreshGridDot(currentPage); refreshProgress();
+  toast(`Sheet ${currentPage} submitted ✓`);
+});
 document.getElementById('printBtn').addEventListener('click',()=>window.print());
 document.getElementById('exportBtn').addEventListener('click',exportData);
 document.getElementById('clearBtn').addEventListener('click',async()=>{
