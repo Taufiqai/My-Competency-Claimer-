@@ -94,6 +94,9 @@ button{font-family:inherit;cursor:pointer}input,textarea{font-family:inherit}
 .testgrid input.num{width:100%;border:none;background:transparent;text-align:center;padding:9px 2px;font-size:14px;color:var(--ink)}
 .testgrid input.note{width:100%;border:none;background:transparent;padding:9px 12px;font-size:13px;color:var(--ink)}
 .testgrid input:focus{background:#fff7e6}
+.testgrid input.calc,.total input.calc{background:#eef4f1;color:var(--teal-d);font-weight:700;cursor:default}
+.testgrid input.calc{border-radius:0}
+.total input.calc{border-color:#bcd6cf}
 .band-notes{padding:12px 14px;border-bottom:1px solid var(--line-2);background:#fff}
 .band-notes label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:600}
 .band-notes textarea{width:100%;min-height:64px;resize:vertical;border:1px solid var(--line);border-radius:10px;padding:9px 11px;font-size:13.5px;color:var(--ink);background:var(--paper-2);font-family:inherit}
@@ -422,6 +425,7 @@ let profileName = "";
 let currentPage = 1;
 let store = {};            // { "1": {field:value}, ... }  cached locally, source of truth = cloud
 let saveTimer = null;
+let suppressSave = false;   // true while populating computed fields during render
 
 /* ---------- bootstrap config ---------- */
 function getConfig(){
@@ -500,9 +504,9 @@ function bandHTML(cls,key,en1,en2,bnTitle,learn,ico,opts){return `
         <div class="th first">&nbsp;</div><div class="th bn">প্রি-টেস্ট<br>Pre-Test</div><div class="th bn">পোস্ট টেস্ট<br>Post-Test</div><div class="th bn">অর্জন<br>Gain</div>
         ${[0,1,2].map(r=>`
           <div class="cell first"><input class="note" data-f="${key}_item${r}" type="text" placeholder="Competency / indicator…"></div>
-          <div class="cell"><input class="num" data-f="${key}_pre${r}" type="number" min="0" inputmode="numeric"></div>
-          <div class="cell"><input class="num" data-f="${key}_post${r}" type="number" min="0" inputmode="numeric"></div>
-          <div class="cell"><input class="num" data-f="${key}_gain${r}" type="number" inputmode="numeric"></div>`).join('')}
+          <div class="cell"><input class="num pre" data-f="${key}_pre${r}" data-key="${key}" type="number" min="0" inputmode="numeric"></div>
+          <div class="cell"><input class="num post" data-f="${key}_post${r}" data-key="${key}" type="number" min="0" inputmode="numeric"></div>
+          <div class="cell"><input class="num gain calc" data-f="${key}_gain${r}" type="number" readonly tabindex="-1" placeholder="—"></div>`).join('')}
       </div>
       <div class="band-notes">
         <label class="bn">নোট / বিবরণ • Notes &amp; description</label>
@@ -510,7 +514,7 @@ function bandHTML(cls,key,en1,en2,bnTitle,learn,ico,opts){return `
       </div>
       <div class="evalrow"><span class="lbl bn">মূল্যায়নের ধরণ • Type</span>
         <div class="checks">${opts.map((o,i)=>chk(`${key}_evtype${i}`,o)).join('')}</div>
-        <span class="total bn">সর্বমোট অর্জন • <input data-f="${key}_total" type="number" min="0" max="100" placeholder="%"> %</span>
+        <span class="total bn">সর্বমোট অর্জন • <input class="calc" data-f="${key}_total" data-key="${key}" type="number" min="0" max="100" readonly tabindex="-1" placeholder="—"> %</span>
       </div>
     </div>
   </div>`;}
@@ -532,10 +536,63 @@ function renderForm(){
     const f=el.dataset.f, pd=store[currentPage]||{};
     if(el.type==='checkbox'){el.checked=!!pd[f];el.addEventListener('change',()=>updateField(f,el.checked));}
     else if(el.type==='radio'){if(pd[el.name]===el.value)el.checked=true;el.addEventListener('change',()=>{if(el.checked)updateField(el.name,el.value);});}
-    else {if(pd[f]!==undefined)el.value=pd[f];el.addEventListener('input',()=>updateField(f,el.value));}
+    else {
+      if(pd[f]!==undefined)el.value=pd[f];
+      if(el.classList.contains('calc')) return; // computed: no manual input listener
+      el.addEventListener('input',()=>updateField(f,el.value));
+      if(el.classList.contains('pre')||el.classList.contains('post')){
+        el.addEventListener('input',()=>recalcBand(el.dataset.key));
+      }
+    }
   });
+  // initial computation for all three bands
+  suppressSave=true;
+  ['knowledge','skills','attitude'].forEach(recalcBand);
+  suppressSave=false;
   document.getElementById('pageRef').textContent=`Sheet ${currentPage} / ${TOTAL_PAGES}`;
   refreshSubmitUI();
+}
+
+/* compute Gain per row (Post − Pre) and band Total % = (ΣPost − ΣPre)/ΣPre × 100 */
+function recalcBand(key){
+  const card=document.getElementById('formCard');
+  let sumPre=0, sumPost=0, haveAny=false;
+  for(let r=0;r<3;r++){
+    const preEl=card.querySelector(`[data-f="${key}_pre${r}"]`);
+    const postEl=card.querySelector(`[data-f="${key}_post${r}"]`);
+    const gainEl=card.querySelector(`[data-f="${key}_gain${r}"]`);
+    if(!preEl||!postEl||!gainEl) continue;
+    const pre=parseFloat(preEl.value), post=parseFloat(postEl.value);
+    const hasPre=!isNaN(pre), hasPost=!isNaN(post);
+    if(hasPre&&hasPost){
+      const gain=post-pre;
+      gainEl.value=gain;
+      setCalc(`${key}_gain${r}`, gain);
+      sumPre+=pre; sumPost+=post; haveAny=true;
+    } else {
+      gainEl.value='';
+      setCalc(`${key}_gain${r}`, '');
+    }
+  }
+  const totalEl=card.querySelector(`[data-f="${key}_total"]`);
+  if(totalEl){
+    if(haveAny && sumPre>0){
+      const pct=Math.round((sumPost-sumPre)/sumPre*100);
+      totalEl.value=pct;
+      setCalc(`${key}_total`, pct);
+    } else if(haveAny && sumPre===0 && sumPost>0){
+      totalEl.value=100; setCalc(`${key}_total`,100);
+    } else {
+      totalEl.value=''; setCalc(`${key}_total`, '');
+    }
+  }
+}
+/* store computed value (so it syncs to cloud + dashboard) without re-rendering */
+function setCalc(field,value){
+  if(!store[currentPage])store[currentPage]={};
+  if(value===''||value==null){ delete store[currentPage][field]; }
+  else { store[currentPage][field]=value; }
+  if(!suppressSave) scheduleSave();
 }
 function refreshSubmitUI(){
   const submitted = !!(store[currentPage] && store[currentPage]._submitted);
