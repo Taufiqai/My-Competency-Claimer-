@@ -165,6 +165,8 @@ button{font-family:inherit;cursor:pointer}input,textarea{font-family:inherit}
 .tabs button.active{background:#fff;color:var(--ink);box-shadow:var(--shadow)}
 .gatecard .gb label{display:block;font-size:12px;color:var(--muted);margin:0 0 6px}
 .gatecard .gb input{width:100%;border:1px solid var(--line);border-radius:11px;padding:11px 13px;font-size:15px;color:var(--ink);background:#fff;margin-bottom:13px}
+.gatecard .gb select{width:100%;border:1px solid var(--line);border-radius:11px;padding:11px 13px;font-size:15px;color:var(--ink);background:#fff;margin-bottom:13px}
+.gatecard .gb select:focus{border-color:var(--teal)}
 .gatecard .gb input:focus{border-color:var(--teal)}
 .gatecard .gb .enter{margin-top:4px;width:100%;border:none;background:var(--ink);color:#fff;border-radius:11px;padding:13px;font-size:15px;font-weight:600}
 .gatecard .gb .enter:hover{background:var(--ink-2)}
@@ -193,6 +195,24 @@ button{font-family:inherit;cursor:pointer}input,textarea{font-family:inherit}
 .config-card summary{cursor:pointer;font-weight:600;color:var(--teal-d)}
 
 .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 16px}
+.artifacts-panel{background:var(--paper-2);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:16px 18px;margin:0 0 16px}
+.ap-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}
+.ap-title{font-weight:700;font-size:15px;color:var(--ink)}
+.ap-sub{font-size:12.5px;color:var(--muted);margin-top:3px}
+.ap-upload{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding-bottom:14px;border-bottom:1px solid var(--line-2)}
+.ap-pick{font-size:13px;color:var(--muted);flex:1;min-width:120px}
+.ap-progress{font-size:13px;color:var(--teal-d);margin-top:12px}
+.ap-list{margin-top:12px;display:flex;flex-direction:column;gap:8px}
+.ap-empty{font-size:13px;color:var(--muted);padding:6px 0}
+.ap-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border:1px solid var(--line-2);border-radius:10px;background:#fff}
+.ap-ico{font-size:18px;flex:none}
+.ap-meta{flex:1;min-width:0}
+.ap-name{font-size:13.5px;color:var(--ink);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ap-info{font-size:11.5px;color:var(--muted);margin-top:2px}
+.ap-actions{display:flex;gap:6px;flex-none}
+.ap-actions button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 10px;font-size:12px;color:var(--ink);cursor:pointer}
+.ap-actions button:hover{border-color:var(--teal)}
+.ap-actions button.del:hover{border-color:var(--eval-red);color:var(--eval-red)}
 .submitbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:18px;padding:16px 18px;background:var(--paper-2);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
 .submitbar-note{font-size:12.5px;color:var(--muted);max-width:60%}
 .submit-btn{border:none;background:var(--ksa-plan);color:#fff;border-radius:11px;padding:13px 28px;font-size:15px;font-weight:700;box-shadow:0 4px 14px rgba(46,125,50,.28)}
@@ -305,6 +325,14 @@ button{font-family:inherit;cursor:pointer}input,textarea{font-family:inherit}
 .prow .pname{font-size:14px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .prow .pmail{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .prow .pcount{font-size:12px;font-weight:700;color:var(--teal-d);background:#e6eff0;border-radius:999px;padding:3px 9px;flex:none}
+.pcourse{font-size:10.5px;font-weight:700;color:#7a4dab;background:#f1ebf8;border-radius:6px;padding:1px 6px;margin-left:4px;letter-spacing:.02em}
+.detail-artifacts{border-bottom:1px solid var(--line-2)}
+.da-head{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal-d);font-weight:700;padding:12px 18px 6px}
+.da-list{display:flex;flex-direction:column;gap:4px;padding:0 18px 12px}
+.da-item{display:flex;align-items:center;gap:8px;font-size:13px}
+.da-name{color:var(--teal-d);font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.da-name:hover{color:var(--teal)}
+.da-info{color:var(--muted);font-size:11.5px;margin-left:auto;white-space:nowrap}
 .dash-empty{padding:60px 24px;text-align:center;color:var(--muted);font-size:14px}
 .dash-detail{background:var(--paper-2);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);min-height:200px;overflow:hidden}
 .detail-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:16px 18px;border-bottom:1px solid var(--line-2);background:#fff}
@@ -381,6 +409,16 @@ button{font-family:inherit;cursor:pointer}input,textarea{font-family:inherit}
       <div id="nameField" style="display:none">
         <label>Full name</label>
         <input id="auName" type="text" placeholder="Your full name" autocomplete="name">
+        <label>Course</label>
+        <select id="auCourse">
+          <option value="">Select course…</option>
+          <option value="FTC">FTC</option>
+          <option value="ACAD">ACAD</option>
+          <option value="SSC">SSC</option>
+          <option value="PPMC">PPMC</option>
+        </select>
+        <label>Roll (3 digits)</label>
+        <input id="auRoll" type="text" inputmode="numeric" maxlength="3" placeholder="e.g. 012" autocomplete="off">
       </div>
       <label>Email</label>
       <input id="auEmail" type="email" placeholder="you@example.com" autocomplete="email">
@@ -427,7 +465,26 @@ button{font-family:inherit;cursor:pointer}input,textarea{font-family:inherit}
       <button class="tbtn primary" id="saveBtn">Save this sheet</button>
       <button class="tbtn" id="printBtn">Print / PDF this sheet</button>
       <button class="tbtn" id="exportBtn">Export my data</button>
+      <button class="tbtn" id="artifactsBtn">📎 Knowledge artifacts</button>
       <button class="tbtn" id="clearBtn">Clear this sheet</button>
+    </div>
+
+    <div class="artifacts-panel" id="artifactsPanel" style="display:none">
+      <div class="ap-head">
+        <div>
+          <div class="ap-title">📎 Knowledge artifacts</div>
+          <div class="ap-sub">Attach supporting files — notes, photos, certificates, slides (max 25 MB each).</div>
+        </div>
+        <button class="tbtn" id="artifactsClose">Close</button>
+      </div>
+      <div class="ap-upload">
+        <input type="file" id="artifactInput" style="display:none">
+        <button class="tbtn primary" id="artifactPick">Choose a file…</button>
+        <span class="ap-pick" id="artifactPickName">No file selected</span>
+        <button class="tbtn" id="artifactUpload" disabled>Upload</button>
+      </div>
+      <div class="ap-progress" id="artifactProgress" style="display:none">Uploading…</div>
+      <div class="ap-list" id="artifactList"><div class="ap-empty">No artifacts uploaded yet.</div></div>
     </div>
 
     <div class="shell">
@@ -578,6 +635,8 @@ const LS_CFG = "mcc_supabase_cfg_v1";
 let supa = null;
 let session = null;
 let profileName = "";
+let profileCourse = "";
+let profileRoll = "";
 let currentPage = 1;
 let store = {};            // { "1": {field:value}, ... }  cached locally, source of truth = cloud
 let saveTimer = null;
@@ -850,14 +909,20 @@ async function doAuth(){
   const email=document.getElementById('auEmail').value.trim();
   const pass=document.getElementById('auPass').value;
   const name=document.getElementById('auName').value.trim();
+  const course=document.getElementById('auCourse').value;
+  const roll=document.getElementById('auRoll').value.trim();
   const btn=document.getElementById('authBtn');
   if(!email||!pass){showMsg('Enter your email and password.','err');return;}
-  if(authMode==='signup'&&!name){showMsg('Enter your full name.','err');return;}
+  if(authMode==='signup'){
+    if(!name){showMsg('Enter your full name.','err');return;}
+    if(!course){showMsg('Please select your course.','err');return;}
+    if(!/^\d{3}$/.test(roll)){showMsg('Roll must be exactly 3 digits.','err');return;}
+  }
   if(pass.length<6){showMsg('Password must be at least 6 characters.','err');return;}
   btn.disabled=true;
   try{
     if(authMode==='signup'){
-      const {data,error}=await supa.auth.signUp({email,password:pass,options:{data:{full_name:name}}});
+      const {data,error}=await supa.auth.signUp({email,password:pass,options:{data:{full_name:name,course:course,roll:roll}}});
       if(error)throw error;
       if(data.session){ await onLoggedIn(data.session); }
       else { showMsg('Account created. Please check your email to confirm, then log in.','ok'); setAuthMode('login'); }
@@ -871,10 +936,13 @@ async function doAuth(){
 }
 async function onLoggedIn(sess){
   session=sess;
-  profileName=(sess.user.user_metadata&&sess.user.user_metadata.full_name)||sess.user.email;
+  const md=sess.user.user_metadata||{};
+  profileName=md.full_name||sess.user.email;
+  profileCourse=md.course||'';
+  profileRoll=md.roll||'';
   document.getElementById('gate').style.display='none';
   document.getElementById('app').style.display='block';
-  document.getElementById('userPill').textContent=profileName;
+  document.getElementById('userPill').textContent = profileName + (profileCourse?` · ${profileCourse}`:'') + (profileRoll?` · ${profileRoll}`:'');
   setCloud('syncing');
   await loadAllSheets();
   await loadRefs();
@@ -893,6 +961,103 @@ async function checkOrganizer(){
   }catch(e){ /* not an organiser or function missing; hide silently */ }
 }
 async function logout(){ await supa.auth.signOut(); location.reload(); }
+
+/* ---------- Knowledge artifacts ---------- */
+const ARTIFACT_MAX = 26214400; // 25 MB
+let pendingFile = null;
+function fmtSize(b){ if(b==null)return ''; if(b<1024)return b+' B'; if(b<1048576)return (b/1024).toFixed(0)+' KB'; return (b/1048576).toFixed(1)+' MB'; }
+function fileIcon(name){
+  const e=(name.split('.').pop()||'').toLowerCase();
+  if(['jpg','jpeg','png','gif','webp','bmp','heic'].includes(e))return '🖼️';
+  if(['pdf'].includes(e))return '📄'; if(['doc','docx'].includes(e))return '📝';
+  if(['xls','xlsx','csv'].includes(e))return '📊'; if(['ppt','pptx'].includes(e))return '📽️';
+  if(['zip','rar','7z'].includes(e))return '🗜️'; return '📎';
+}
+function toggleArtifacts(){
+  const p=document.getElementById('artifactsPanel');
+  const show=p.style.display==='none';
+  p.style.display=show?'block':'none';
+  if(show){ loadArtifacts(); window.scrollTo({top:0,behavior:'smooth'}); }
+}
+async function loadArtifacts(){
+  const list=document.getElementById('artifactList');
+  list.innerHTML='<div class="ap-empty">Loading…</div>';
+  try{
+    const {data,error}=await supa.from('artifacts').select('*').eq('user_id',session.user.id).order('uploaded_at',{ascending:false});
+    if(error)throw error;
+    renderArtifacts(data||[]);
+  }catch(e){ list.innerHTML='<div class="ap-empty">Could not load artifacts. Make sure the storage setup SQL has been run.</div>'; }
+}
+function renderArtifacts(items){
+  const list=document.getElementById('artifactList');
+  if(!items.length){ list.innerHTML='<div class="ap-empty">No artifacts uploaded yet.</div>'; return; }
+  list.innerHTML='';
+  items.forEach(it=>{
+    const row=document.createElement('div'); row.className='ap-item';
+    row.innerHTML=`<span class="ap-ico">${fileIcon(it.file_name)}</span>
+      <div class="ap-meta"><div class="ap-name">${esc(it.file_name)}</div>
+      <div class="ap-info">${fmtSize(it.size_bytes)} • ${new Date(it.uploaded_at).toLocaleDateString()}</div></div>
+      <div class="ap-actions">
+        <button data-act="dl">Download</button>
+        <button class="del" data-act="del">Delete</button>
+      </div>`;
+    row.querySelector('[data-act="dl"]').addEventListener('click',()=>downloadArtifact(it));
+    row.querySelector('[data-act="del"]').addEventListener('click',()=>deleteArtifact(it));
+    list.appendChild(row);
+  });
+}
+function pickArtifact(){ document.getElementById('artifactInput').click(); }
+function onArtifactPicked(e){
+  const f=e.target.files&&e.target.files[0];
+  const nameEl=document.getElementById('artifactPickName');
+  const upBtn=document.getElementById('artifactUpload');
+  if(!f){ pendingFile=null; nameEl.textContent='No file selected'; upBtn.disabled=true; return; }
+  if(f.size>ARTIFACT_MAX){
+    pendingFile=null; nameEl.textContent=`"${f.name}" is ${fmtSize(f.size)} — over the 25 MB limit.`;
+    upBtn.disabled=true; toast('File exceeds 25 MB'); return;
+  }
+  pendingFile=f; nameEl.textContent=`${f.name} (${fmtSize(f.size)})`; upBtn.disabled=false;
+}
+async function uploadArtifact(){
+  if(!pendingFile) return;
+  if(pendingFile.size>ARTIFACT_MAX){ toast('File exceeds 25 MB'); return; }
+  const prog=document.getElementById('artifactProgress');
+  const upBtn=document.getElementById('artifactUpload');
+  prog.style.display='block'; upBtn.disabled=true;
+  try{
+    const safe=pendingFile.name.replace(/[^\w.\-]+/g,'_');
+    const path=`${session.user.id}/${Date.now()}_${safe}`;
+    const {error:upErr}=await supa.storage.from('artifacts').upload(path,pendingFile,{upsert:false,contentType:pendingFile.type||'application/octet-stream'});
+    if(upErr)throw upErr;
+    const {error:metaErr}=await supa.from('artifacts').insert({
+      user_id:session.user.id, participant_name:profileName,
+      file_name:pendingFile.name, storage_path:path, size_bytes:pendingFile.size
+    });
+    if(metaErr)throw metaErr;
+    pendingFile=null;
+    document.getElementById('artifactInput').value='';
+    document.getElementById('artifactPickName').textContent='No file selected';
+    toast('Artifact uploaded');
+    loadArtifacts();
+  }catch(e){ toast(e.message||'Upload failed'); }
+  finally{ prog.style.display='none'; }
+}
+async function downloadArtifact(it){
+  try{
+    const {data,error}=await supa.storage.from('artifacts').createSignedUrl(it.storage_path,120);
+    if(error)throw error;
+    window.open(data.signedUrl,'_blank');
+  }catch(e){ toast('Could not open file'); }
+}
+async function deleteArtifact(it){
+  if(!confirm(`Delete "${it.file_name}"? This cannot be undone.`)) return;
+  try{
+    await supa.storage.from('artifacts').remove([it.storage_path]);
+    await supa.from('artifacts').delete().eq('id',it.id);
+    toast('Artifact deleted');
+    loadArtifacts();
+  }catch(e){ toast('Could not delete'); }
+}
 
 /* ---------- KSA Self-Rating module ---------- */
 const RATE_SECTIONS=[
@@ -1199,14 +1364,14 @@ async function loadDashboard(){
     dashData=data||[];
     dashByUser={};
     dashData.forEach(r=>{
-      if(!dashByUser[r.user_id]) dashByUser[r.user_id]={name:r.participant_name||'(no name)',email:r.email||'',pages:{},rating:null};
+      if(!dashByUser[r.user_id]) dashByUser[r.user_id]={name:r.participant_name||'(no name)',email:r.email||'',course:r.course||'',roll:r.roll||'',pages:{},rating:null};
       if(r.data&&Object.keys(r.data).length) dashByUser[r.user_id].pages[r.page]=r.data;
     });
     // also load self-ratings
     try{
       const {data:rdata,error:rerr}=await supa.rpc('get_all_ratings');
       if(!rerr && rdata){ rdata.forEach(r=>{
-        if(!dashByUser[r.user_id]) dashByUser[r.user_id]={name:r.participant_name||'(no name)',email:r.email||'',pages:{},rating:null};
+        if(!dashByUser[r.user_id]) dashByUser[r.user_id]={name:r.participant_name||'(no name)',email:r.email||'',course:'',roll:'',pages:{},rating:null};
         dashByUser[r.user_id].rating=r.data;
       }); }
     }catch(e){}
@@ -1241,14 +1406,15 @@ function renderDashList(filter){
   const rowsEl=document.getElementById('dashRows');
   const f=(filter||'').toLowerCase();
   const entries=Object.entries(dashByUser)
-    .filter(([id,u])=>!f||u.name.toLowerCase().includes(f)||u.email.toLowerCase().includes(f))
+    .filter(([id,u])=>!f||u.name.toLowerCase().includes(f)||u.email.toLowerCase().includes(f)||(u.course||'').toLowerCase().includes(f)||(u.roll||'').includes(f))
     .sort((a,b)=>a[1].name.localeCompare(b[1].name));
   if(!entries.length){ rowsEl.innerHTML='<div class="dash-empty">No matches.</div>'; return; }
   rowsEl.innerHTML='';
   entries.forEach(([id,u])=>{
     const b=document.createElement('button');
     b.className='prow'+(id===dashSelected?' active':'');
-    b.innerHTML=`<div class="pmeta"><div class="pname">${esc(u.name)}</div><div class="pmail">${esc(u.email)}</div></div>
+    const tag=(u.course||u.roll)?`<span class="pcourse">${esc(u.course||'')}${u.course&&u.roll?' · ':''}${esc(u.roll||'')}</span>`:'';
+    b.innerHTML=`<div class="pmeta"><div class="pname">${esc(u.name)} ${tag}</div><div class="pmail">${esc(u.email)}</div></div>
       <span class="pcount">${Object.keys(u.pages).length}/${TOTAL_PAGES}</span>`;
     b.addEventListener('click',()=>selectParticipant(id));
     rowsEl.appendChild(b);
@@ -1266,16 +1432,37 @@ function selectParticipant(id){
     const has=!!u.pages[i];
     pagesHTML+=`<button class="${has?'has':'empty'}" data-pg="${i}">${i}</button>`;
   }
+  const cr=[u.course,u.roll].filter(Boolean).join(' · ');
   detail.innerHTML=`
     <div class="detail-head">
-      <div><div class="dn">${esc(u.name)}</div><div class="dm">${esc(u.email)} • ${filled.length} of ${TOTAL_PAGES} sheets filled</div></div>
+      <div><div class="dn">${esc(u.name)}</div><div class="dm">${cr?esc(cr)+' • ':''}${esc(u.email)} • ${filled.length} of ${TOTAL_PAGES} sheets filled</div></div>
     </div>
     ${ratingReadoutHTML(u.rating)}
+    <div class="detail-artifacts" id="detailArtifacts"><div class="ap-empty" style="padding:10px 18px">Loading artifacts…</div></div>
     <div class="detail-pages">${pagesHTML}</div>
     <div class="sheet-readout" id="sheetReadout"></div>`;
   detail.querySelectorAll('.detail-pages button').forEach(btn=>{
     btn.addEventListener('click',()=>showSheet(id,+btn.dataset.pg,btn));
   });
+  loadParticipantArtifacts(id);
+}
+async function loadParticipantArtifacts(id){
+  const box=document.getElementById('detailArtifacts');
+  if(!box) return;
+  try{
+    const {data,error}=await supa.from('artifacts').select('*').eq('user_id',id).order('uploaded_at',{ascending:false});
+    if(error)throw error;
+    if(!data||!data.length){ box.innerHTML='<div class="ap-empty" style="padding:10px 18px">No knowledge artifacts uploaded.</div>'; return; }
+    let html='<div class="da-head">📎 Knowledge artifacts ('+data.length+')</div><div class="da-list">';
+    data.forEach(it=>{
+      html+=`<div class="da-item"><span>${fileIcon(it.file_name)}</span><span class="da-name" data-path="${esc(it.storage_path)}">${esc(it.file_name)}</span><span class="da-info">${fmtSize(it.size_bytes)} • ${new Date(it.uploaded_at).toLocaleDateString()}</span></div>`;
+    });
+    html+='</div>';
+    box.innerHTML=html;
+    box.querySelectorAll('.da-name').forEach(el=>{
+      el.addEventListener('click',()=>downloadArtifact({storage_path:el.dataset.path}));
+    });
+  }catch(e){ box.innerHTML='<div class="ap-empty" style="padding:10px 18px">Could not load artifacts.</div>'; }
 }
 function ratingReadoutHTML(r){
   if(!r) return `<div style="padding:10px 18px;border-bottom:1px solid var(--line-2);font-size:12.5px;color:var(--muted)">No KSA self-rating submitted.</div>`;
@@ -1357,14 +1544,14 @@ function esc(s){return (s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;'
 
 function dashCSV(){
   // one row per (participant, page, field)=value — fully flat & spreadsheet-friendly
-  const lines=[['Participant','Email','Sheet','Submitted','Field','Value']];
+  const lines=[['Participant','Course','Roll','Email','Sheet','Submitted','Field','Value']];
   Object.values(dashByUser).forEach(u=>{
     Object.keys(u.pages).map(Number).sort((a,b)=>a-b).forEach(pg=>{
       const d=u.pages[pg];
       const sub=d._submitted?('Yes ('+d._submitted+')'):'No';
       Object.keys(d).forEach(f=>{
         if(f==='_submitted')return;
-        lines.push([u.name,u.email,pg,sub,(FIELD_LABELS[f]||f),d[f]]);
+        lines.push([u.name,u.course||'',u.roll||'',u.email,pg,sub,(FIELD_LABELS[f]||f),d[f]]);
       });
     });
   });
@@ -1379,7 +1566,7 @@ function dashCSV(){
 }
 function ratingCSV(){
   // one row per (participant, section, domain) with pre/post/gain or commitment
-  const lines=[['Participant','Email','Section','#','Domain','Pre','Post','Gain','Commitment%']];
+  const lines=[['Participant','Course','Roll','Email','Section','#','Domain','Pre','Post','Gain','Commitment%']];
   const secs=[['k','Knowledge'],['s','Skills'],['a','Attitude']];
   Object.values(dashByUser).forEach(u=>{
     const r=u.rating; if(!r) return;
@@ -1388,12 +1575,12 @@ function ratingCSV(){
         const pre=row.pre, post=row.post;
         const gain=(pre!==''&&post!==''&&!isNaN(parseFloat(pre))&&!isNaN(parseFloat(post)))?(parseFloat(post)-parseFloat(pre)):'';
         if(pre!==''||post!==''){
-          lines.push([u.name,u.email,label,i+1,KSA_CONTENT.domains[i],pre,post,gain,'']);
+          lines.push([u.name,u.course||'',u.roll||'',u.email,label,i+1,KSA_CONTENT.domains[i],pre,post,gain,'']);
         }
       });
     });
     (r.ksa||[]).forEach((v,i)=>{
-      if(v!==''&&v!=null) lines.push([u.name,u.email,'Workplace commitment',i+1,KSA_CONTENT.domains[i],'','','',v]);
+      if(v!==''&&v!=null) lines.push([u.name,u.course||'',u.roll||'',u.email,'Workplace commitment',i+1,KSA_CONTENT.domains[i],'','','',v]);
     });
   });
   if(lines.length===1){ toast('No self-ratings to export yet'); return; }
@@ -1441,6 +1628,12 @@ document.getElementById('submitBtn').addEventListener('click',async()=>{
 });
 document.getElementById('printBtn').addEventListener('click',()=>window.print());
 document.getElementById('exportBtn').addEventListener('click',exportData);
+document.getElementById('artifactsBtn').addEventListener('click',toggleArtifacts);
+document.getElementById('artifactsClose').addEventListener('click',toggleArtifacts);
+document.getElementById('artifactPick').addEventListener('click',pickArtifact);
+document.getElementById('artifactInput').addEventListener('change',onArtifactPicked);
+document.getElementById('artifactUpload').addEventListener('click',uploadArtifact);
+document.getElementById('artifactInput').addEventListener('click',e=>e.stopPropagation());
 document.getElementById('clearBtn').addEventListener('click',async()=>{
   if(confirm(`Clear all entries on Sheet ${currentPage}? This cannot be undone.`)){
     delete store[currentPage];
